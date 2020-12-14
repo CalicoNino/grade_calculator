@@ -9,20 +9,20 @@ class App extends Component {
     courses: [
       {
         id:0,
-        courseName: 'Who',
+        courseName: '',
         grades: [
           {id: 0,
-          name: "Assignment 1",
-          result: 30,
-          weight: 20},
+          name: '',
+          result: '',
+          weight: ''},
           {id: 1,
-          name: "Assignment 1",
-          result: 30,
-          weight: 20},
+          name: '',
+          result: '',
+          weight: ''},
           {id: 2,
-          name: "Assignment 1",
-          result: 30,
-          weight: 20}
+          name: '',
+          result: '',
+          weight: ''}
         ],
         desGrade: 50
       }
@@ -30,19 +30,19 @@ class App extends Component {
   }
 
   save = () => {
-    localStorage.setItem('data', JSON.stringify(this.state.courses))
+    sessionStorage.setItem('data', JSON.stringify(this.state.courses))
   }
 
-  // componentDidMount() {
-  //   setInterval(() => {
-  //     this.save()
-  //   }, 1000)
+  componentDidMount() {
+    setInterval(() => {
+      this.save()
+    }, 1000)
 
-  //   // if (localStorage.getItem('data')) {
-  //   //   const courses = JSON.parse(localStorage.getItem('data'));
-  //   //   this.setState({courses})
-  //   // }
-  // }
+    if (sessionStorage.getItem('data')) {
+      const courses = JSON.parse(sessionStorage.getItem('data'));
+      this.setState({courses})
+    }
+  }
 
   addCourse = () => {
     const courses = [...this.state.courses]
@@ -96,7 +96,7 @@ class App extends Component {
     this.setState({courses})
   }
 
-  handleGrade = (event, courseId, gradeId) => {
+  handle = (event, courseId, gradeId) => {
     var tmp = event.target.value;
     var eventId = event.target.id;
     const courses = [...this.state.courses]
@@ -107,47 +107,57 @@ class App extends Component {
         courses[courseId].grades[gradeId].result = tmp; break;
       case "weight"+courseId+gradeId:
         courses[courseId].grades[gradeId].weight = tmp; break;
+      case "desGrade"+courseId:
+        courses[courseId].desGrade = tmp; break;
+      case courses[courseId].courseName+courseId:
+        courses[courseId].courseName = tmp; break;
       default:
         break;
     }
     this.setState({courses})
   }
 
-  handleDesiredGrade = (event, courseId) => {
-    var tmp = event.target.value;
-    const courses = [...this.state.courses]
-    courses[courseId].desGrade = tmp;
-    this.setState({courses})
-  }
-
-  handelCourseName = (event, courseId) => {
-    var tmp = event.target.value;
-    const courses = [...this.state.courses]
-    courses[courseId].courseName = tmp;
-    this.setState({courses})
-  }
-
-  totalWeight = (courseId) => {
+  calculation = (courseId) => {
     const grades = this.state.courses[courseId].grades
-    var total = 0;
-    for (var i in grades)
-      total += grades[i].weight*1;//fixes future adddition bug
-    return total;
+    var totalWeight = 0;
+    var totalGrade = 0;
+    for (var i in grades) {
+      totalWeight += grades[i].weight*1;//fixes future adddition bug
+      totalGrade += grades[i].weight * (grades[i].result/100);
+    }
+    return [totalWeight, totalGrade];
   }
 
-  curGrade = (courseId) => {
-    const grades = this.state.courses[courseId].grades
-    var total = 0;
-    for (var i in grades)
-      total += grades[i].weight * (grades[i].result/100);
-    return total;
+  download = () => {
+    var downloadLink = document.createElement("a");
+    var blob = new Blob(["\ufeff", JSON.stringify(this.state.courses)]);
+    var url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = "grades.json";
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   }
+
+  upload = (e) => {
+    let json = e.target.files;
+
+    let reader = new FileReader();
+    reader.readAsDataURL(json[0]);
+
+  
+  }
+
+
 
   render() {
     return (
       <div className="App">
         <NavBar/>
-        <button onClick={() => this.addCourse("test")} className="btn btn-small btn-primary">Add Class</button>
+        <button onClick={() => this.addCourse("test")} className="btn btn-sm btn-primary">Add Class</button>
+        <button onClick={() => this.download()} className="btn btn-sm btn-info">Download json</button>
+        <input className="bg-warning" type="file" id="upload" onChange={(e) => this.upload(e)} />
         {this.state.courses.map(course => 
           <Course
             key={course.id}
@@ -158,11 +168,8 @@ class App extends Component {
             deleteCourse={this.deleteCourse}
             addGrade={this.addGrade}
             deleteGrade={this.deleteGrade}
-            handleGrade={this.handleGrade}
-            totalWeight={this.totalWeight}
-            curGrade={this.curGrade}
-            handleDesiredGrade={this.handleDesiredGrade}
-            handelCourseName={this.handelCourseName}/>
+            handle={this.handle}
+            calculation={this.calculation}/>
         )}
         <Footer/>   
       </div>

@@ -3,12 +3,12 @@ import Grade from './grade';
 
 class Course extends Component {
     render() {
-        const { id, courseName, grades, desGrade, deleteCourse, addGrade, deleteGrade, handleGrade, totalWeight, curGrade, handleDesiredGrade, handelCourseName } = this.props;
+        const { id, courseName, grades, desGrade, deleteCourse, addGrade, deleteGrade, handle, calculation } = this.props;
         return (
             <React.Fragment>
                 <div className="input-group mb-3">
-                    <input type="text" id="courseName" className="form-control" value={courseName} onChange={e => handelCourseName(e, id)} 
-                        maxlength="12" size="12" placeholder="Class Name" aria-label="Class Name" aria-describedby="basic-addon1"/>
+                    <input type="text" id={courseName+id} className="form-control" value={courseName} onChange={e => handle(e, id)} 
+                        size="12" placeholder="Class Name" aria-label="Class Name" aria-describedby="basic-addon1"/>
                 </div>
                 <button className="btn btn-small btn-danger" onClick={() => deleteCourse(id)}>Delete Class</button>
                 <button onClick={() => addGrade(id)} className="btn btn-small btn-primary">Add Grade</button>
@@ -21,7 +21,7 @@ class Course extends Component {
                         weight={grade.weight}
                         courseId={id}
                         deleteGrade={deleteGrade}
-                        handleGrade={handleGrade}/>
+                        handle={handle}/>
                 )}
 
                 <table className="border">
@@ -29,8 +29,8 @@ class Course extends Component {
                         <tr>
                             <td>
                                 <div className="input-group mb-3">
-                                    <input type="text" id="totalWeight" className="form-control" value={totalWeight(id)} 
-                                        maxlength="2" size="2" placeholder="Total Weight" aria-label="Total Weight" aria-describedby="basic-addon1" readOnly/>
+                                    <input type="text" id={"totalWeight"+id} className="form-control" value={calculation(id)[0]} 
+                                        size="2" placeholder="Total Weight" aria-label="Total Weight" aria-describedby="basic-addon1" readOnly/>
                                     <div className="input-group-append">
                                         <span className="input-group-text">%</span>
                                     </div>
@@ -38,8 +38,8 @@ class Course extends Component {
                             </td>
                             <td>
                                 <div className="input-group mb-3">
-                                    <input type="text" id="examWeight" className="form-control" value={(100-totalWeight(id))} 
-                                        maxlength="2" size="2" placeholder="Exam Weight" aria-label="Exam Weight" aria-describedby="basic-addon1" readOnly/>
+                                    <input type="text" id={"examWeight"+id} className="form-control" value={(100-calculation(id)[0])} 
+                                        size="2" placeholder="Exam Weight" aria-label="Exam Weight" aria-describedby="basic-addon1" readOnly/>
                                     <div className="input-group-append">
                                         <span className="input-group-text">%</span>
                                     </div>
@@ -47,8 +47,8 @@ class Course extends Component {
                             </td>
                             <td>
                                 <div className="input-group mb-3">
-                                    <input type="text" id="curGrade" className="form-control" value={curGrade(id)} 
-                                        maxlength="2" size="2" placeholder="Current Grade" aria-label="Current Grade" aria-describedby="basic-addon1" readOnly/>
+                                    <input type="text" id={"curGrade"+id} className="form-control" value={calculation(id)[1]} 
+                                        size="2" placeholder="Current Grade" aria-label="Current Grade" aria-describedby="basic-addon1" readOnly/>
                                     <div className="input-group-append">
                                         <span className="input-group-text">%</span>
                                     </div>
@@ -56,8 +56,8 @@ class Course extends Component {
                             </td>
                             <td>
                                 <div className="input-group mb-3">
-                                    <input type="text" id="desGrade" className="form-control" value={desGrade} onChange={e => handleDesiredGrade(e, id)} 
-                                        maxlength="2" size="2" placeholder="Desired Grade" aria-label="Desired Grade" aria-describedby="basic-addon1"/>
+                                    <input type="text" id={"desGrade"+id} className="form-control" value={desGrade} onChange={e => handle(e, id)} 
+                                        size="2" placeholder="Desired Grade" aria-label="Desired Grade" aria-describedby="basic-addon1"/>
                                     <div className="input-group-append">
                                         <span className="input-group-text">%</span>
                                     </div>
@@ -65,8 +65,8 @@ class Course extends Component {
                             </td>
                             <td>
                                 <div className="input-group mb-3">
-                                    <input type="text" id="reqFinal" className="form-control" value={((desGrade-curGrade(id))/(100-totalWeight(id)) * 100).toFixed(2)} 
-                                        maxlength="2" size="2" placeholder="Requried Final Grade" aria-label="Requried Final Grade" aria-describedby="basic-addon1" readOnly/>
+                                    <input type="text" id={"reqFinal"+id} className="form-control" value={((desGrade-calculation(id)[1])/(100-calculation(id)[0]) * 100).toFixed(2)} 
+                                        size="2" placeholder="Requried Final Grade" aria-label="Requried Final Grade" aria-describedby="basic-addon1" readOnly/>
                                     <div className="input-group-append">
                                         <span className="input-group-text">%</span>
                                     </div>
