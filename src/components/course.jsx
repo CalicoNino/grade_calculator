@@ -8,18 +8,18 @@ class Course extends Component {
             <React.Fragment>
                 <div className="row mx-3">
                     <div className="len ml-auto">
-                        <div className="scroll mx-auto mb-4 bg-secondary rounded">
-                        {grades.map(grade => 
-                            <Grade
-                                key={grade.id}
-                                id={grade.id}
-                                name={grade.name}
-                                result={grade.result}
-                                weight={grade.weight}
-                                courseId={id}
-                                deleteGrade={deleteGrade}
-                                handle={handle}/>
-                            )} 
+                        <div className="scroll mx-auto mb-4 bg-secondary rounded long">
+                            {grades.map(grade => 
+                                <Grade
+                                    key={grade.id}
+                                    id={grade.id}
+                                    name={grade.name}
+                                    result={grade.result}
+                                    weight={grade.weight}
+                                    courseId={id}
+                                    deleteGrade={deleteGrade}
+                                    handle={handle}/>
+                                )} 
                         </div>
                     </div>
                     
@@ -36,7 +36,7 @@ class Course extends Component {
                             <tbody>
                                 <tr>
                                     <td>                              
-                                        Total Weight:
+                                        <p className="mb-4">Total Weight:</p>
                                     </td>
                                     <td>
                                         <div className="input-group mb-3">
@@ -49,7 +49,9 @@ class Course extends Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    Exam Weight: 
+                                    <td>                              
+                                        <p className="mb-4">Exam Weight</p>
+                                    </td>
                                     <td>
                                         <div className="input-group mb-3">
                                             <input type="text" id={"examWeight"+id} className="form-control" value={(100-calculation(id)[0])} 
@@ -61,7 +63,9 @@ class Course extends Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    Current Grade:
+                                    <td>                              
+                                        <p className="mb-4">Current Weight:</p>
+                                    </td>
                                     <td>
                                         <div className="input-group mb-3">
                                             <input type="text" id={"curGrade"+id} className="form-control" value={calculation(id)[1]} 
@@ -73,8 +77,8 @@ class Course extends Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        Desired Grade:
+                                    <td>                              
+                                        <p className="mb-4">Desired Grade:</p>
                                     </td>
                                     <td> 
                                         <div className="input-group mb-3">
@@ -87,9 +91,12 @@ class Course extends Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    Grade Needed <br/>on Final
+                                    <td>                              
+                                        <p>Grade Needed <br/>on Final Exam:</p>
+                                    </td>
+                                    
                                     <td>
-                                        <div className="input-group mb-1">
+                                        <div className="input-group">
                                             <input type="text" id={"reqFinal"+id} className="form-control" value={((desGrade-calculation(id)[1])/(100-calculation(id)[0]) * 100).toFixed(2)} 
                                                 size="2" placeholder="Requried Final Grade" aria-label="Requried Final Grade" aria-describedby="basic-addon1" readOnly/>
                                             <div className="input-group-append">

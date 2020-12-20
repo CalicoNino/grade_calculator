@@ -100,15 +100,22 @@ class App extends Component {
     var tmp = event.target.value;
     var eventId = event.target.id;
     const courses = [...this.state.courses]
+    const re = /^[0-9\b]+$/;
     switch (eventId) {
       case "name"+courseId+gradeId:
         courses[courseId].grades[gradeId].name = tmp; break;
       case "result"+courseId+gradeId:
-        courses[courseId].grades[gradeId].result = tmp; break;
+        if (event.target.value === '' || re.test(event.target.value)) {
+          courses[courseId].grades[gradeId].result = tmp;
+        } break;
       case "weight"+courseId+gradeId:
-        courses[courseId].grades[gradeId].weight = tmp; break;
+        if (event.target.value === '' || re.test(event.target.value)) {
+          courses[courseId].grades[gradeId].weight = tmp;
+        } break;
       case "desGrade"+courseId:
-        courses[courseId].desGrade = tmp; break;
+        if (event.target.value === '' || re.test(event.target.value)) {
+          courses[courseId].desGrade = tmp;
+        } break;
       case courses[courseId].courseName+courseId:
         courses[courseId].courseName = tmp; break;
       default:
@@ -150,6 +157,15 @@ class App extends Component {
 
   }
 
+  isNumber = (e) => {
+    e = (e) ? e : window.event;
+    var charCode = (e.which) ? e.which : e.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+  } 
+
   render() {
     return (
       <div className="App">
@@ -169,8 +185,10 @@ class App extends Component {
             addGrade={this.addGrade}
             deleteGrade={this.deleteGrade}
             handle={this.handle}
-            calculation={this.calculation}/>
+            calculation={this.calculation}
+            isNumber={this.isNumber}/>
         )}
+
         <Footer
           download={this.download}
           upload={this.upload}/>   
