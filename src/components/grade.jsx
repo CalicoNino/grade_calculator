@@ -4,8 +4,8 @@ class Grade extends Component {
     render() {
         const { id, name, result, weight, courseId, deleteGrade, handle } = this.props;
         return (
-            <React.Fragment>
-                <table className="border">
+            <div className="mx-auto">
+                <table className="border mx-auto p-3 border-0">
                     <tbody>
                         <tr>
                             <td>
@@ -32,11 +32,11 @@ class Grade extends Component {
                                     </div>
                                 </div>
                             </td>
-                            <td><button className="btn btn-small btn-danger mb-3" onClick={() => deleteGrade(courseId, id)}>Delete</button></td>
+                            <td><button className="btn btn-small btn-danger mb-3" onClick={() => deleteGrade(courseId, id)}>X</button></td>
                         </tr>
                     </tbody>
                 </table>
-            </React.Fragment>
+            </div>
         );
     }
 }

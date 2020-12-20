@@ -54,11 +54,11 @@ class App extends Component {
         name: '',
         result: '',
         weight:''},
-        {id: 2,
+        {id: 1,
         name: '',
         result: '',
         weight:''},
-        {id: 3,
+        {id: 2,
         name: '',
         result: '',
         weight:''},
@@ -145,19 +145,19 @@ class App extends Component {
 
     let reader = new FileReader();
     reader.readAsDataURL(json[0]);
+    console.log(reader)
 
-  
+
   }
-
-
 
   render() {
     return (
       <div className="App">
         <NavBar/>
-        <button onClick={() => this.addCourse("test")} className="btn btn-sm btn-primary">Add Class</button>
-        <button onClick={() => this.download()} className="btn btn-sm btn-info">Download json</button>
-        <input className="bg-warning" type="file" id="upload" onChange={(e) => this.upload(e)} />
+
+        <button onClick={() => this.addCourse("test")} className="btn btn-primary mt-3">Add Class</button>
+        <hr/>
+        
         {this.state.courses.map(course => 
           <Course
             key={course.id}
@@ -171,7 +171,9 @@ class App extends Component {
             handle={this.handle}
             calculation={this.calculation}/>
         )}
-        <Footer/>   
+        <Footer
+          download={this.download}
+          upload={this.upload}/>   
       </div>
     );
   }
