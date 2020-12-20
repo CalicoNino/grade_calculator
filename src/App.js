@@ -245,7 +245,7 @@ class App extends Component {
             calculation={this.calculation}
             isNumber={this.isNumber}/>
         )}
-
+        <br/>
         <Footer/>   
       </div>
     );
