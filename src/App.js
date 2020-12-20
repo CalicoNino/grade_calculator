@@ -6,6 +6,7 @@ import Footer from './components/footer';
 
 class App extends Component {
   state = {
+    division: [5,10],
     courses: [
       {
         id:0,
@@ -100,7 +101,9 @@ class App extends Component {
     var tmp = event.target.value;
     var eventId = event.target.id;
     const courses = [...this.state.courses]
-    const re = /^[0-9\b]+$/;
+    const division = [...this.state.division]
+    const re = /^[0-9\b]|\.+$/;
+    const re2 = /^[0-9\b]+$/;
     switch (eventId) {
       case "name"+courseId+gradeId:
         courses[courseId].grades[gradeId].name = tmp; break;
@@ -118,10 +121,19 @@ class App extends Component {
         } break;
       case courses[courseId].courseName+courseId:
         courses[courseId].courseName = tmp; break;
+      case "numerator":
+        if (event.target.value === '' || re2.test(event.target.value)) {
+          division[0] = tmp;
+        } break;
+      case "denominator":
+        if (event.target.value === '' || re2.test(event.target.value)) {
+          division[1] = tmp;
+        } break;
       default:
         break;
     }
     this.setState({courses})
+    this.setState({division})
   }
 
   calculation = (courseId) => {
@@ -148,14 +160,18 @@ class App extends Component {
   }
 
   upload = (e) => {
-    let json = e.target.files;
+    var json = e.target.files;
+    console.log("Data file", json)
 
     let reader = new FileReader();
-    reader.readAsDataURL(json[0]);
-    console.log(reader)
-
-
+    reader.readAsText(json[0]);
+    reader.onload= (e) => {
+      console.log(e.target.result)
+      const courses = JSON.parse(e.target.result);
+      this.setState({courses})
+    }
   }
+
 
   isNumber = (e) => {
     e = (e) ? e : window.event;
@@ -166,12 +182,53 @@ class App extends Component {
     return true;
   } 
 
+  copyCodeToClipboard = () => {
+    const el = this.textArea
+    el.select()
+    document.execCommand("copy")
+  }
+
   render() {
     return (
       <div className="App">
         <NavBar/>
 
-        <button onClick={() => this.addCourse("test")} className="btn btn-primary mt-3">Add Class</button>
+        <div id="mySidenav" className="sidenav bg-info text-center">
+            <h4 className="text-light font-weight-bold">Helper</h4><hr/>
+            <p className="text-light px-3">For grades formatted as fractions:</p>
+            <div  className="input-group bg-info w-50 ml-4">
+                <input type="text" id="numerator" value={this.state.division[0]} onChange={e => this.handle(e, 0, 0)} className="form-control ml-5" aria-describedby="basic-addon1" />
+            </div>
+
+            <h1 className="text-center mx-auto">/</h1> 
+
+            <div className="input-group bg-info w-50 ml-5">
+                <input type="text" id="denominator" value={this.state.division[1]} onChange={e => this.handle(e, 0, 0)} className="form-control ml-5" aria-describedby="basic-addon1" />
+            </div>
+            <br/>
+            <div className="input-group">
+                <input type="text" id={"eq"} ref={(textarea) => this.textArea = textarea}
+                className="form-control w-25 ml-3" value={this.state.division[0]/this.state.division[1] * 100} size="2" placeholder="Your Grade" aria-label="Your Grade" aria-describedby="basic-addon1" readOnly/>
+                <div className="input-group-append mr-3">
+                    <span className="input-group-text">%</span>
+                </div>
+            </div>
+
+            <button className="btn btn-sm btn-secondary mt-3" onClick={() => this.copyCodeToClipboard()}>Copy to Clipboard</button> <br/> <hr/>
+
+            <button className="closebtn title-font btn btn-nonhover rounded-circle" onClick={() => document.getElementById("mySidenav").style.width = "0"} >&times;</button>
+            
+            <div>
+                <p className="text-light px-3">Download a JSON format <br/>  of your grades</p>
+                <button onClick={() => this.download()} className="btn btn-sm btn-secondary">Download json</button> <br/> <hr/>
+                <p className="text-light px-3">Upload a JSON format <br/>  of your grades</p>
+                <input accept=".json" onChange={(e) => this.upload(e)} className="btn btn-sm btn-info mx-auto" type="file" id="upload"/>               
+            </div>
+            
+        </div>
+
+        <button onClick={() => this.addCourse("test")} className="btn btn-lg btn-hover border mt-3 font-weight-bold">Add Class</button>
+        <p> Click on the Logo at the Top or Bottom of page or any percentage sign to view Helper.</p>
         <hr/>
         
         {this.state.courses.map(course => 
@@ -189,9 +246,7 @@ class App extends Component {
             isNumber={this.isNumber}/>
         )}
 
-        <Footer
-          download={this.download}
-          upload={this.upload}/>   
+        <Footer/>   
       </div>
     );
   }

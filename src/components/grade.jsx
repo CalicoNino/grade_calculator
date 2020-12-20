@@ -19,7 +19,8 @@ class Grade extends Component {
                                     <input type="text" id={"result"+courseId+id} className="form-control" value={result} onChange={e => handle(e, courseId, id)} 
                                         size="2" placeholder="Grade" aria-label="Grade" aria-describedby="basic-addon1"/>
                                     <div className="input-group-append">
-                                        <span className="input-group-text">%</span>
+                                        <button id={"res"+courseId+id} className="input-group-text btn" 
+                                        onClick={() => document.getElementById("mySidenav").style.width = "250px"}>%</button>
                                     </div>
                                 </div>
                             </td>
@@ -28,11 +29,12 @@ class Grade extends Component {
                                     <input type="text" id={"weight"+courseId+id} className="form-control" value={weight} onChange={e => handle(e, courseId, id)} 
                                         size="2" placeholder="Weight" aria-label="Weight" aria-describedby="basic-addon1"/>
                                     <div className="input-group-append">
-                                        <span className="input-group-text">%</span>
+                                        <button id={"wei"+courseId+id} className="input-group-text btn" 
+                                        onClick={() => document.getElementById("mySidenav").style.width = "250px"}>%</button>
                                     </div>
                                 </div>
                             </td>
-                            <td><button className="btn btn-small btn-danger mb-3" onClick={() => deleteGrade(courseId, id)}>X</button></td>
+                            <td><button className="btn btn-small btn-danger mb-3 text-light" onClick={() => deleteGrade(courseId, id)}>X</button></td>
                         </tr>
                     </tbody>
                 </table>

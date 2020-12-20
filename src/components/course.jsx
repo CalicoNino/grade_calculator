@@ -3,7 +3,7 @@ import Grade from './grade';
 
 class Course extends Component {
     render() {
-        const { id, courseName, grades, desGrade, deleteCourse, addGrade, deleteGrade, handle, calculation } = this.props;
+        const { id, courseName, grades, desGrade, deleteCourse, addGrade, deleteGrade, handle, calculation, download, upload } = this.props;
         return (
             <React.Fragment>
                 <div className="row mx-3">
@@ -18,7 +18,9 @@ class Course extends Component {
                                     weight={grade.weight}
                                     courseId={id}
                                     deleteGrade={deleteGrade}
-                                    handle={handle}/>
+                                    handle={handle}
+                                    download={download}
+                                    upload={upload}/>
                                 )} 
                         </div>
                     </div>
@@ -36,63 +38,63 @@ class Course extends Component {
                             <tbody>
                                 <tr>
                                     <td>                              
-                                        <p className="mb-4">Total Weight:</p>
+                                        <p className="mb-4 font-weight-bold">Total Weight:</p>
                                     </td>
                                     <td>
                                         <div className="input-group mb-3">
                                             <input type="text" id={"totalWeight"+id} className="form-control" value={calculation(id)[0]} 
                                                 size="2" placeholder="Total Weight" aria-label="Total Weight" aria-describedby="basic-addon1" readOnly/>
                                             <div className="input-group-append">
-                                                <span className="input-group-text">%</span>
+                                                <button className="input-group-text btn" onClick={() => document.getElementById("mySidenav").style.width = "250px"}>%</button>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>                              
-                                        <p className="mb-4">Exam Weight</p>
+                                        <p className="mb-4 font-weight-bold">Exam Weight</p>
                                     </td>
                                     <td>
                                         <div className="input-group mb-3">
-                                            <input type="text" id={"examWeight"+id} className="form-control" value={(100-calculation(id)[0])} 
+                                            <input type="text" id={"examWeight"+id} className="form-control" value={(100-calculation(id)[0]).toFixed(2)} 
                                                 size="2" placeholder="Exam Weight" aria-label="Exam Weight" aria-describedby="basic-addon1" readOnly/>
                                             <div className="input-group-append">
-                                                <span className="input-group-text">%</span>
+                                                <button className="input-group-text btn" onClick={() => document.getElementById("mySidenav").style.width = "250px"}>%</button>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>                              
-                                        <p className="mb-4">Current Weight:</p>
+                                        <p className="mb-4 font-weight-bold">Current Grade:</p>
                                     </td>
                                     <td>
                                         <div className="input-group mb-3">
                                             <input type="text" id={"curGrade"+id} className="form-control" value={calculation(id)[1]} 
                                                 size="2" placeholder="Current Grade" aria-label="Current Grade" aria-describedby="basic-addon1" readOnly/>
                                             <div className="input-group-append">
-                                                <span className="input-group-text">%</span>
+                                                <button className="input-group-text btn" onClick={() => document.getElementById("mySidenav").style.width = "250px"}>%</button>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>                              
-                                        <p className="mb-4">Desired Grade:</p>
+                                        <p className="mb-4 font-weight-bold">Desired Grade:</p>
                                     </td>
                                     <td> 
                                         <div className="input-group mb-3">
                                             <input type="text" id={"desGrade"+id} className="form-control" value={desGrade} onChange={e => handle(e, id)} 
                                                 size="2" placeholder="Desired Grade" aria-label="Desired Grade" aria-describedby="basic-addon1"/>
                                             <div className="input-group-append">
-                                                <span className="input-group-text">%</span>
+                                                <button className="input-group-text btn" onClick={() => document.getElementById("mySidenav").style.width = "250px"}>%</button>
                                             </div>
                                         </div>                                
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>                              
-                                        <p>Grade Needed <br/>on Final Exam:</p>
+                                        <p className="font-weight-bold">Grade Needed <br/>on Final Exam:</p>
                                     </td>
                                     
                                     <td>
@@ -100,7 +102,7 @@ class Course extends Component {
                                             <input type="text" id={"reqFinal"+id} className="form-control" value={((desGrade-calculation(id)[1])/(100-calculation(id)[0]) * 100).toFixed(2)} 
                                                 size="2" placeholder="Requried Final Grade" aria-label="Requried Final Grade" aria-describedby="basic-addon1" readOnly/>
                                             <div className="input-group-append">
-                                                <span className="input-group-text">%</span>
+                                                <button className="input-group-text btn" onClick={() => document.getElementById("mySidenav").style.width = "250px"}>%</button>
                                             </div>
                                         </div>
                                     </td>
